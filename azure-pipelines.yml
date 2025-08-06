@@ -1,0 +1,28 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+
+trigger:
+  branches:
+    include:
+    - develop
+
+strategy:
+  matrix:
+    Python312:
+      python.version: '3.12'
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+    displayName: 'Use Python $(python.version)'
+
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+      pip install pytest pytest-azurepipelines
+      pytest
+    displayName: 'Run pytest tests'
